@@ -7,6 +7,7 @@ require 'ponominalu/configuration'
 require 'ponominalu/api'
 require 'ponominalu/client'
 require 'ponominalu/response'
+require 'ponominalu/error'
 
 module Ponominalu
   extend Configuration
