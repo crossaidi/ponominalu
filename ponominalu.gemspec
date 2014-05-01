@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'faraday',                     '~> 0.8'
   s.add_runtime_dependency 'faraday_middleware',          '~> 0.8'
   s.add_runtime_dependency 'faraday_middleware-parse_oj', '~> 0.2'
+  s.add_runtime_dependency 'hashie',                      '~> 2.0'
 
   s.add_development_dependency 'bundler', '~>1.3'
   s.add_development_dependency 'rake'
@@ -30,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mysql'
   s.add_development_dependency 'damerau-levenshtein'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'pry-debugger'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'webmock'
 end
