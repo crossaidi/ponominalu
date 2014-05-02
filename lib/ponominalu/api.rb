@@ -1,9 +1,7 @@
-require 'yaml'
-
 module Ponominalu
   module API
     # Base part of Ponominalu API endpoint url.
-    BASE_URL = 'http://api.cultserv.ru/jtransport'
+    BASE_URL = 'http://api.cultserv.ru/jtransport'.freeze
 
     class << self
       # API method call.
@@ -16,6 +14,7 @@ module Ponominalu
         args[:session] = Ponominalu.session
         response = connection(url).send(Ponominalu.http_verb,
           method_name_str, args).body
+
         response.method_name = method_name
         response.params = args
         # binding.pry
@@ -26,13 +25,13 @@ module Ponominalu
       # @param [String] Connection URL (either full or just prefix).
       # @return [Faraday::Connection] Created connection.
       def connection(url)
-        Faraday.new(url, Ponominalu.faraday_options) do |builder|
-          builder.request  :multipart
-          builder.request  :url_encoded
-          builder.request  :retry, Ponominalu.max_retries
-          builder.response :mashify
-          builder.response :oj, preserve_raw: true
-          builder.adapter  Ponominalu.adapter
+        Faraday.new(url, Ponominalu.faraday_options) do |faraday|
+          faraday.request  :multipart
+          faraday.request  :url_encoded
+          faraday.request  :retry, Ponominalu.max_retries
+          faraday.response :mashify
+          faraday.response :oj, preserve_raw: true
+          faraday.adapter  Ponominalu.adapter
         end
       end
 
