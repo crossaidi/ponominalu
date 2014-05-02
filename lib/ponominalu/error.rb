@@ -10,7 +10,7 @@ module Ponominalu
       @error_code   = data.code
       @error_msg    = data.message
       @method_name  = data.method_name
-      @session      = data.params.delete(:session)
+      @session      = data.session
       @params       = data.params
     end
 
@@ -19,12 +19,14 @@ module Ponominalu
     def message
       message = "Ponominalu returned an error #{@error_code}: '#{@error_msg}'"\
                 " after calling method '#{@method_name}'"
+
       if (@params.empty?)
         message << " without parameters."
       else
         message << " with parameters #{@params.inspect}."
       end
       message << " App session is '#{@session}'."
+
       message
     end
   end

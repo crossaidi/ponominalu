@@ -11,13 +11,9 @@ module Ponominalu
       def call_method(method_name, args = {}, &block)
         method_name_str = method_name.to_s
         url = create_url(method_name_str)
-        args[:session] = Ponominalu.session
+
         response = connection(url).send(Ponominalu.http_verb,
           method_name_str, args).body
-
-        response.method_name = method_name
-        response.params = args
-        # binding.pry
         Response.process(response, block)
       end
 
@@ -31,6 +27,7 @@ module Ponominalu
           faraday.request  :retry, Ponominalu.max_retries
           faraday.response :mashify
           faraday.response :oj, preserve_raw: true
+          faraday.response :pn_params
           faraday.adapter  Ponominalu.adapter
         end
       end
