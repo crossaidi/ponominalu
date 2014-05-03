@@ -1,7 +1,8 @@
 module Ponominalu
   # Faraday middleware for passing the session param to the request
-  # and user params to the response under the hood
-  class ParametersResolver < Faraday::Response::Middleware
+  # and user params to the response under the hood.
+  # Also it handles global request errors
+  class Middleware < Faraday::Response::Middleware
     # Passes the session param
     # @param [Hash] env Request data.
     def call(env)
@@ -29,5 +30,5 @@ module Ponominalu
   end
 end
 
-Faraday::Response.register_middleware pn_params:
-  Ponominalu::ParametersResolver
+Faraday::Response.register_middleware pn:
+  Ponominalu::Middleware

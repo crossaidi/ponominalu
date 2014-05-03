@@ -29,7 +29,7 @@ module Ponominalu
           faraday.request  :retry, Ponominalu.max_retries
           faraday.response :mashify
           faraday.response :oj, preserve_raw: true
-          faraday.response :pn_params
+          faraday.response :pn
           faraday.adapter  Ponominalu.adapter
         end
       end
@@ -39,7 +39,7 @@ module Ponominalu
         # @param [String] method_name A name of the method.
         # @return [String] url
         def create_url(method_name)
-          filename = File.expand_path('../prefix_simple_methods.yml', __FILE__)
+          filename = File.expand_path('../simple_methods.yml', __FILE__)
           simple_methods = YAML.load_file(filename)
           url_prefix = simple_methods.include?(method_name) ? '/simple/' :
             '/partner/'
