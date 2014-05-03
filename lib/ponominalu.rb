@@ -5,6 +5,7 @@ require 'yaml'
 require 'pry'
 
 require 'ponominalu/configuration'
+require 'ponominalu/helpers'
 require 'ponominalu/parameters_resolver'
 require 'ponominalu/api'
 require 'ponominalu/response'

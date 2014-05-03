@@ -6,7 +6,7 @@ module Ponominalu
     # @param [Hash] env Request data.
     def call(env)
       @method_name = env.url.to_s.split('/').last
-      @params = parse_params(env.body)
+      @params = Helpers.parse_params(env.body)
 
       env.body << "&session=#{Ponominalu.session}"
       super
@@ -26,15 +26,6 @@ module Ponominalu
         raise "Request failed with status code #{env.status}."
       end
     end
-
-    private
-      def parse_params(params)
-        params.split('&').inject({}) do |hash, part|
-          key_value = part.split('=')
-          hash[key_value.first] = key_value.last
-          hash
-        end
-      end
   end
 end
 

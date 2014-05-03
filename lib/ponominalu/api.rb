@@ -11,9 +11,11 @@ module Ponominalu
       def call_method(method_name, args = {}, &block)
         method_name_str = method_name.to_s
         url = create_url(method_name_str)
+        args = Helpers.flatten(args)
 
         response = connection(url).send(Ponominalu.http_verb,
           method_name_str, args).body
+
         Response.process(response, block)
       end
 
