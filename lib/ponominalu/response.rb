@@ -7,7 +7,7 @@ module Ponominalu
       # @return [Array, Hashie::Mash] The processed result.
       # @raise [Ponominalu::Error] raised when Ponominalu returns an error response.
       def process(response, block)
-        result = get_result(response)
+        result = Ponominalu.raw ? response : get_result(response)
 
         if result.respond_to?(:each)
           # enumerable result receives :map with a block when called with a block

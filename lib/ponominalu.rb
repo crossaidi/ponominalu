@@ -18,4 +18,6 @@ module Ponominalu
       API.call_method(method, *args, &block)
     end
   end
+
+  Object.const_set(:Pn, Ponominalu)
 end

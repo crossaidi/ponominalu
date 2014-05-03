@@ -6,6 +6,7 @@ module Ponominalu
       session: '123',
       max_retries: 2,
       empty_strict: false,
+      raw: false,
       http_verb: :post,
       faraday_options: {}
     }.freeze
@@ -31,6 +32,7 @@ module Ponominalu
       @session         = DEFAULT_OPTIONS[:session]
       @max_retries     = DEFAULT_OPTIONS[:max_retries]
       @empty_strict    = DEFAULT_OPTIONS[:empty_strict]
+      @raw             = DEFAULT_OPTIONS[:raw]
       @http_verb       = DEFAULT_OPTIONS[:http_verb]
       @faraday_options = DEFAULT_OPTIONS[:faraday_options]
       # @logger          = ::Logger.new(STDOUT)
