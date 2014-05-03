@@ -12,10 +12,8 @@ module Ponominalu
         method_name_str = method_name.to_s
         url = create_url(method_name_str)
         args = Helpers.flatten(args)
-
         response = connection(url).send(Ponominalu.http_verb,
           method_name_str, args).body
-
         Response.process(response, block)
       end
 
@@ -28,7 +26,7 @@ module Ponominalu
           faraday.request  :url_encoded
           faraday.request  :retry, Ponominalu.max_retries
 
-          unless Ponominalu.raw
+          unless Ponominalu.raw_json
             faraday.response :mashify
             faraday.response :oj, preserve_raw: true
           end

@@ -5,13 +5,14 @@ module Ponominalu
       # @param [Hashie::Mash] response The server response in mash format.
       # @param [Proc] block A block passed to the API method.
       # @return [Array, Hashie::Mash] The processed result.
-      # @raise [Ponominalu::Error] raised when Ponominalu returns an error response.
+      # @raise [Ponominalu::Error] raised when Ponominalu returns
+      # an error response.
       def process(response, block)
-        result = Ponominalu.raw ? response : get_result(response)
+        result = Ponominalu.raw_json ? response : get_result(response)
 
         if result.respond_to?(:each)
-          # enumerable result receives :map with a block when called with a block
-          # or is returned untouched otherwise
+          # enumerable result receives :map with a block when called
+          # with a block or is returned untouched otherwise
           block.nil? ? result : result.map(&block)
         else
           # non-enumerable result is yielded if block_given?)
@@ -28,7 +29,7 @@ module Ponominalu
         elsif response.code < 1
           raise Ponominalu::Error.new(response)
         else
-          response.message
+          Ponominalu.wrap_response ? response : response.message
         end
       end
     end

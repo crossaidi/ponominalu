@@ -19,5 +19,6 @@ module Ponominalu
     end
   end
 
+  # Register alias
   Object.const_set(:Pn, Ponominalu)
 end
