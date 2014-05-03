@@ -2,7 +2,6 @@ require 'faraday'
 require 'faraday_middleware'
 require 'faraday_middleware/parse_oj'
 require 'yaml'
-require 'pry'
 
 require 'ponominalu/configuration'
 require 'ponominalu/helpers'

@@ -1,10 +1,6 @@
 module Ponominalu
   module Configuration
-    # All options keys
-    OPTIONS_KEYS = [:adapter, :session, :max_retries,
-      :empty_strict, :http_verb, :faraday_options].freeze
-
-    # Default options
+    # Default global options
     DEFAULT_OPTIONS = {
       adapter: Faraday.default_adapter,
       session: '123',
@@ -14,21 +10,15 @@ module Ponominalu
       faraday_options: {}
     }.freeze
 
-    attr_accessor *OPTIONS_KEYS
+    attr_accessor *DEFAULT_OPTIONS.keys
 
     # A global configuration set via the block or hash.
+    # @param [Hash] options Hash of options
     # @example
     #   Ponominalu.configure do |config|
     #     config.adapter = :net_http
     #     config.logger  = Rails.logger
     #   end
-    #
-    #  or
-    #
-    #   Ponominalu.configure({
-    #     adapter: :net_http,
-    #     logger: Rails.logger
-    #   })
     def configure(options={})
       configure_by_hash(options) unless options.empty?
       yield self if block_given?
@@ -49,12 +39,15 @@ module Ponominalu
       # @log_responses   = DEFAULT_LOGGER_OPTIONS[:responses]
     end
 
-    # Set configuration options to their default values, when this module is extended.
+    # Set configuration options to their default values,
+    # when this module is extended.
     def self.extended(base)
       base.reset
     end
 
     private
+      # Configures global options via hash
+      # @param [Hash] options Hash of options
       def configure_by_hash(options)
         OPTIONS_KEYS.each do |k|
           send("#{k}=", options[k])

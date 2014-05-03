@@ -20,7 +20,7 @@ module Ponominalu
       end
 
       # Faraday connection.
-      # @param [String] Connection URL (either full or just prefix).
+      # @param [String] url Connection URL (either full or just prefix).
       # @return [Faraday::Connection] Created connection.
       def connection(url)
         Faraday.new(url, Ponominalu.faraday_options) do |faraday|
@@ -35,7 +35,7 @@ module Ponominalu
       end
 
       private
-        # Create a complete url from prefixes and a method name
+        # Creates a complete url from prefixes and the method name
         # @param [String] method_name A name of the method.
         # @return [String] url
         def create_url(method_name)
