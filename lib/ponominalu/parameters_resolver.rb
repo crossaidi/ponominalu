@@ -12,17 +12,19 @@ module Ponominalu
       super
     end
 
-    # Passes the user params
+    # Passes the user params and handle request errors
     # @param [Hash] env Response data.
     def on_complete(env)
-      raise 'API method not found' if env.status == 404
+      if env.status == 200
+        response_arr = env.body[1..-2].split(',')
+        response_arr << "\"method_name\": \"#{@method_name}\""
+        response_arr << "\"session\": \"#{Ponominalu.session}\""
+        response_arr << "\"params\": #{Oj.dump(@params)}"
 
-      response_arr = env.body[1..-2].split(',')
-      response_arr << "\"method_name\": \"#{@method_name}\""
-      response_arr << "\"session\": \"#{Ponominalu.session}\""
-      response_arr << "\"params\": #{Oj.dump(@params)}"
-
-      env.body = "{#{response_arr.join(',')}}"
+        env.body = "{#{response_arr.join(',')}}"
+      else
+        raise "Request failed with status code #{env.status}."
+      end
     end
 
     private
