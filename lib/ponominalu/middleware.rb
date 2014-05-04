@@ -17,10 +17,11 @@ module Ponominalu
     # @param [Hash] env Response data.
     def on_complete(env)
       if env.status == 200
+        binding.pry
         response_arr = env.body[1..-2].split(',')
-        response_arr << "\"method_name\": \"#{@method_name}\""
-        response_arr << "\"session\": \"#{Ponominalu.session}\""
-        response_arr << "\"params\": #{Oj.dump(@params)}"
+          .push("\"method_name\": \"#{@method_name}\"")
+          .push("\"session\": \"#{Ponominalu.session}\"")
+          .push("\"params\": #{Oj.dump(@params)}")
 
         env.body = "{#{response_arr.join(',')}}"
       else
