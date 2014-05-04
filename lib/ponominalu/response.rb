@@ -8,6 +8,8 @@ module Ponominalu
       # @raise [Ponominalu::Error] raised when Ponominalu returns
       # an error response.
       def process(response, block)
+        @logger = Ponominalu.logger
+
         result = Ponominalu.raw_json ? response : get_result(response)
 
         if result.respond_to?(:each)
@@ -25,10 +27,13 @@ module Ponominalu
         # an empty array is returned if error code is 0 (not found)
         # and empty_strict option is false
         if response.code.zero? && !Ponominalu.empty_strict
+          @logger.warn "Nothing was found. Result is empty." if Ponominalu.log_errors?
           []
         elsif response.code < 1
+          @logger.error "#{response.code}: #{response.message}." if Ponominalu.log_errors?
           raise Ponominalu::Error.new(response)
         else
+          @logger.debug "body: #{response.inspect}" if Ponominalu.log_responses?
           Ponominalu.wrap_response ? response : response.message
         end
       end

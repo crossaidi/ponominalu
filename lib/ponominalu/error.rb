@@ -26,7 +26,6 @@ module Ponominalu
         message << " with parameters #{@params.inspect}."
       end
       message << " App session is '#{@session}'."
-
       message
     end
   end
