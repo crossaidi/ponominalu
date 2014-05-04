@@ -1,3 +1,5 @@
+require 'logger'
+
 module Ponominalu
   module Configuration
     # Default global options
@@ -7,6 +9,7 @@ module Ponominalu
       max_retries: 2,
       empty_strict: false,
       raw_json: false,
+      logger: ::Logger.new(STDOUT),
       wrap_response: false,
       http_verb: :post,
       faraday_options: {}
@@ -27,20 +30,11 @@ module Ponominalu
       self
     end
 
-    # Reset configuration options to defaults.
+    # Reset configuration options to default values.
     def reset
-      @adapter         = DEFAULT_OPTIONS[:adapter]
-      @session         = DEFAULT_OPTIONS[:session]
-      @max_retries     = DEFAULT_OPTIONS[:max_retries]
-      @empty_strict    = DEFAULT_OPTIONS[:empty_strict]
-      @raw_json        = DEFAULT_OPTIONS[:raw_json]
-      @wrap_response   = DEFAULT_OPTIONS[:wrap_response]
-      @http_verb       = DEFAULT_OPTIONS[:http_verb]
-      @faraday_options = DEFAULT_OPTIONS[:faraday_options]
-      # @logger          = ::Logger.new(STDOUT)
-      # @log_requests    = DEFAULT_LOGGER_OPTIONS[:requests]
-      # @log_errors      = DEFAULT_LOGGER_OPTIONS[:errors]
-      # @log_responses   = DEFAULT_LOGGER_OPTIONS[:responses]
+      DEFAULT_OPTIONS.each do |k, v|
+        send("#{k}=", v)
+      end
     end
 
     # Set configuration options to their default values,
@@ -53,7 +47,7 @@ module Ponominalu
       # Configures global options via hash
       # @param [Hash] options Hash of options
       def configure_by_hash(options)
-        OPTIONS_KEYS.each do |k|
+        DEFAULT_OPTIONS.keys.each do |k|
           send("#{k}=", options[k])
         end
       end
