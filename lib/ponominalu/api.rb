@@ -26,11 +26,11 @@ module Ponominalu
           faraday.request  :url_encoded
           faraday.request  :retry, Ponominalu.max_retries
 
-          unless Ponominalu.raw_json
-            faraday.response :mashify
-            faraday.response :oj, preserve_raw: true
-          end
-
+          # unless Ponominalu.raw_json
+            # faraday.response :mashify
+            # faraday.response :oj, preserve_raw: true
+          # end
+          # faraday.response :error_handler
           faraday.response :pn
           faraday.adapter  Ponominalu.adapter
         end
