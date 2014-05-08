@@ -15,8 +15,8 @@ module Ponominalu
       # Converts params string to hash
       # @param [String] Part of the request url with user params
       # @return [Hash] Hash of user params
-      def parse_params(params)
-        params.split('&').inject({}) do |hash, part|
+      def parse_params(params_str)
+        params_str.split('&').inject({}) do |hash, part|
           key_value = part.split('=')
           hash[key_value.first] = key_value.last
           hash
