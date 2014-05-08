@@ -5,18 +5,23 @@ module Ponominalu
   class Middleware < Faraday::Response::Middleware
     # Passes the session param
     # @param [Hash] env Request data.
+    def initialize(app)
+      super(app)
+      @session = Ponominalu.session
+      @logger = Ponominalu.logger
+    end
+
     def call(env)
+      # Parse the params and the method name from request body
       @method_name = env.url.to_s.split('/').last
       @params = Helpers.parse_params(env.body)
-      @logger = Ponominalu.logger
-      @session = Ponominalu.session
 
       if Ponominalu.log_requests?
         @logger.debug "Ponominalu: #{@method_name.upcase} #{env[:url].to_s}"
         @logger.debug "session: #{@session} params: #{@params}"
       end
 
-      # Add session to user request params
+      # Add the session to the user request params
       env.body << "&session=#{@session}"
       super
     end
@@ -29,18 +34,18 @@ module Ponominalu
         raise "Request failed with status code #{env.status}."
       end
 
-      debug_data = {
+      config_data = {
         method_name: @method_name,
         params: @params,
         session: @session
       }
 
-      env.body = Hashie::Mash.new(Oj.load(env.body).merge(debug_data))
+      env.body = Hashie::Mash.new(Oj.load(env.body).merge(config_data))
 
       if env.body.code.zero? && !Ponominalu.empty_strict
-        @logger.warn "Nothing was found. Result is empty." if Ponominalu.log_errors?
+        @logger.warn "Nothing was found. Result is empty."
       elsif env.body.code < 1
-        @logger.error "#{env.body.code}: #{env.body.message}." if Ponominalu.log_errors?
+        @logger.error "#{env.body.code}: #{env.body.message}."
         raise Ponominalu::Error.new(env.body)
       else
         @logger.debug "body: #{env.body}" if Ponominalu.log_responses?
@@ -50,5 +55,5 @@ module Ponominalu
   end
 end
 
-Faraday::Response.register_middleware pn:
+Faraday::Response.register_middleware ponominalu:
   Ponominalu::Middleware

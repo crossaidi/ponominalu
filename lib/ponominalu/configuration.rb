@@ -11,7 +11,6 @@ module Ponominalu
       raw_json: false,
       logger: ::Logger.new(STDOUT),
       log_requests: true,
-      log_errors: true,
       log_responses: false,
       wrap_response: false,
       http_verb: :post,
@@ -21,7 +20,6 @@ module Ponominalu
     attr_accessor *DEFAULT_OPTIONS.keys
 
     alias_method :log_requests?,  :log_requests
-    alias_method :log_errors?,    :log_errors
     alias_method :log_responses?, :log_responses
 
     # A global configuration set via the block or hash.
