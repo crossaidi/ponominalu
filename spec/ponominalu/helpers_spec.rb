@@ -12,6 +12,11 @@ describe Ponominalu::Helpers do
   end
 
   describe '.parse_params' do
-    pending
+    let(:param_str) { 'alias=something&id=123&exclude=venue' }
+
+    it 'correctly parse the params' do
+      expect(subject.parse_params(param_str))
+        .to eq({ 'alias' => 'something', 'id' => '123', 'exclude' => 'venue'})
+    end
   end
 end
