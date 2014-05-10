@@ -1,34 +1,17 @@
 require 'spec_helper'
 
 describe Ponominalu do
-  context 'when delegating' do
-    it 'is Ponominalu::Client instance' do
-      expect(subject.client).to be_a(Ponominalu::Client)
+  context 'when short alias is registered' do
+    it 'automatically registers the short alias' do
+      expect(subject).to eq(Pn)
     end
   end
 
-  describe '.configure' do
-    it 'is configured to default values when options is empty' do
-      expect(subject.session).to eq('123')
-      expect(subject.adapter).to eq(:net_http)
-    end
-
-    it 'is configured by passing hash' do
-      subject.configure({
-        adapter: :excon,
-        session: '333444'
-      })
-      expect(subject.adapter).to eq(:excon)
-      expect(subject.session).to eq('333444')
-    end
-
-    it 'is configured by giving block' do
-      subject.configure do |config|
-        config.adapter = :excon
-        config.session = '333444'
-      end
-      expect(subject.adapter).to eq(:excon)
-      expect(subject.session).to eq('333444')
+  context 'when delegating to API module' do
+    it 'delegates methods to API.call_method' do
+      expect(subject::API).to receive(:call_method)
+        .with(:test_method)
+      subject.test_method
     end
   end
 end
