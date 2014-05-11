@@ -50,7 +50,6 @@ module Ponominalu
       else
         @logger.debug "body: #{env.body}" if Ponominalu.log_responses?
       end
-      # binding.pry
     end
   end
 end
