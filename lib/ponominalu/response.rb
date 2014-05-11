@@ -28,6 +28,9 @@ module Ponominalu
         if response.code.zero? && !Ponominalu.empty_strict
           []
         else
+          # if wrap_response option is true response is returned
+          # as element of response wrapper with api status code
+          # and params
           Ponominalu.wrap_response ? response : response.message
         end
       end
