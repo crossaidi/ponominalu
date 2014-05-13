@@ -1,23 +1,20 @@
 require 'spec_helper'
 
 describe Ponominalu::API do
-  def create_connection
-    @response = '{ \'code\' => 1, \'message\' => \'result\' }'
-
-    @connection = Faraday.new do |builder|
+  let(:connection) do
+    Faraday.new do |builder|
       builder.adapter  :test do |stub|
         stub.post('/api_method') do
-          [200, {}, @response]
+          [200, {}, double('Response')]
         end
       end
     end
-    subject.stub(:connection).and_return(@connection)
   end
 
   describe ".call_method" do
 
     before(:each) do
-      create_connection
+      subject.stub(:connection).and_return(connection)
     end
 
     it "calls a connection" do
@@ -27,10 +24,10 @@ describe Ponominalu::API do
     end
 
     it "returns the response body" do
-      @response = @connection.send(Ponominalu.http_verb, 'api_method', {}).body
-      Ponominalu::Response.stub(:process).and_return(@response)
+      response = connection.send(Ponominalu.http_verb, 'api_method', {}).body
+      Ponominalu::Response.stub(:process).and_return(response)
 
-      expect(subject.call_method('api_method')).to eq(@response)
+      expect(subject.call_method('api_method')).to eq(response)
     end
 
     it "gets an HTTP verb from Ponominalu.http_verb" do
@@ -39,7 +36,7 @@ describe Ponominalu::API do
       Ponominalu.http_verb = http_verb
 
       response = double("Response", body: double)
-      expect(@connection).to receive(:send).with(http_verb, 'api_method', {}).and_return(response)
+      expect(connection).to receive(:send).with(http_verb, 'api_method', {}).and_return(response)
       subject.call_method('api_method')
     end
 

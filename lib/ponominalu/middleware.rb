@@ -13,11 +13,12 @@ module Ponominalu
 
     def call(env)
       # Parse the params and the method name from request body
+      # binding.pry
       @method_name = env.url.to_s.split('/').last
       @params = Helpers.parse_params(env.body)
 
       if Ponominalu.log_requests?
-        @logger.debug "Ponominalu: #{@method_name.upcase} #{env[:url].to_s}"
+        @logger.debug "Ponominalu: #{@method_name.upcase} #{env.url.to_s}"
         @logger.debug "session: #{@session} params: #{@params}"
       end
 
@@ -29,6 +30,8 @@ module Ponominalu
     # Passes the user params and handle request errors
     # @param [Hash] env Response data.
     def on_complete(env)
+      # binding.pry
+
       if env.status != 200
         @logger.error "Request failed with status code #{env.status}."
         raise "Request failed with status code #{env.status}."
@@ -43,8 +46,9 @@ module Ponominalu
       env.body = Hashie::Mash.new(Oj.load(env.body).merge(config_data))
 
       if env.body.code.zero? && !Ponominalu.empty_strict
-        @logger.warn "Nothing was found. Result is empty."
+        @logger.warn 'Nothing was found. Result is empty.'
       elsif env.body.code < 1
+        # @logger.error "#{env.body.code}: #{env.body.message}."
         @logger.error "#{env.body.code}: #{env.body.message}."
         raise Ponominalu::Error.new(env.body)
       else
