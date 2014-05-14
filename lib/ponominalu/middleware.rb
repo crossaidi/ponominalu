@@ -1,7 +1,7 @@
 module Ponominalu
-  # Faraday middleware for passing the session param to the request
-  # and user params to the response under the hood.
-  # Also it handles global request errors
+  # Faraday middleware for a passing the session param to the request
+  # and config data to the response under the hood.
+  # Also it handles errors
   class Middleware < Faraday::Response::Middleware
     # Passes the session param
     # @param [Hash] env Request data.
@@ -13,7 +13,6 @@ module Ponominalu
 
     def call(env)
       # Parse the params and the method name from request body
-      # binding.pry
       @method_name = env.url.to_s.split('/').last
       @params = Helpers.parse_params(env.body)
 
@@ -30,8 +29,6 @@ module Ponominalu
     # Passes the user params and handle request errors
     # @param [Hash] env Response data.
     def on_complete(env)
-      # binding.pry
-
       if env.status != 200
         @logger.error "Request failed with status code #{env.status}."
         raise "Request failed with status code #{env.status}."
@@ -48,7 +45,6 @@ module Ponominalu
       if env.body.code.zero? && !Ponominalu.empty_strict
         @logger.warn 'Nothing was found. Result is empty.'
       elsif env.body.code < 1
-        # @logger.error "#{env.body.code}: #{env.body.message}."
         @logger.error "#{env.body.code}: #{env.body.message}."
         raise Ponominalu::Error.new(env.body)
       else
