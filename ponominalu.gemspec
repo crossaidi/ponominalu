@@ -28,6 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler',                 '~> 1.3'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'pry'
-  # s.add_development_dependency 'pry-debugger',            '~> 0.2.1'
   s.add_development_dependency 'rspec'
 end
