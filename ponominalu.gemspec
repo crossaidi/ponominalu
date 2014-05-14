@@ -25,9 +25,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'hashie',                      '~> 2.0'
   s.add_runtime_dependency 'oj',                          '~> 2.8'
 
-  s.add_development_dependency 'bundler', '~>1.3'
+  s.add_development_dependency 'bundler',                 '~> 1.3'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-debugger'
+  s.add_development_dependency 'pry-debugger',            '~> 0.2.1'
   s.add_development_dependency 'rspec'
 end
