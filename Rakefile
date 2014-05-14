@@ -5,7 +5,7 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 
 desc 'Turn on the console with preloaded ponominalu'
-task :console do
+task :debug do
   sh 'pry -I ./lib -r ./lib/ponominalu'
 end
 
