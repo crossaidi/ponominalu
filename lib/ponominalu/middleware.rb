@@ -30,7 +30,9 @@ module Ponominalu
     # @param [Hash] env Response data.
     def on_complete(env)
       if env.status != 200
-        @logger.error "Request failed with status code #{env.status}."
+        if Ponominalu.log_errors?
+          @logger.warn "Request failed with status code #{env.status}."
+        end
         raise "Request failed with status code #{env.status}."
       end
 
@@ -43,9 +45,13 @@ module Ponominalu
       env.body = Hashie::Mash.new(Oj.load(env.body).merge(config_data))
 
       if env.body.code.zero? && !Ponominalu.empty_strict
-        @logger.warn 'Nothing was found. Result is empty.'
+        if Ponominalu.log_errors?
+          @logger.warn 'Nothing was found. Result is empty.'
+        end
       elsif env.body.code < 1
-        @logger.error "#{env.body.code}: #{env.body.message}."
+        if Ponominalu.log_errors?
+          @logger.warn "#{env.body.code}: #{env.body.message}."
+        end
         raise Ponominalu::Error.new(env.body)
       else
         @logger.debug "body: #{env.body}" if Ponominalu.log_responses?

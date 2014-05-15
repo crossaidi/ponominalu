@@ -12,6 +12,7 @@ module Ponominalu
       logger: ::Logger.new(STDOUT),
       log_requests: true,
       log_responses: false,
+      log_errors: true,
       wrap_response: false,
       http_verb: :post,
       faraday_options: {}
@@ -21,6 +22,7 @@ module Ponominalu
 
     alias_method :log_requests?,  :log_requests
     alias_method :log_responses?, :log_responses
+    alias_method :log_errors?,    :log_errors
 
     # A global configuration set via the block or hash.
     # @param [Hash] options Hash of options

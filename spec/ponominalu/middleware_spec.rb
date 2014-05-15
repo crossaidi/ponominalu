@@ -28,6 +28,7 @@ describe Ponominalu::Middleware do
     Ponominalu.session = 'test_session'
     Ponominalu.log_requests  = false
     Ponominalu.log_responses = false
+    Ponominalu.log_errors = false
   end
 
   subject { Ponominalu::Middleware.new(app) }
@@ -55,31 +56,35 @@ describe Ponominalu::Middleware do
       Oj.stub(:load).and_return({})
     end
 
-    context '(logging)' do
+    context 'and it is logging)' do
       before(:each) { subject.stub(:raise) }
 
-      it 'calls warn method on the logger if result is empty' do
-        env_empty.stub(:body=)
+      context 'and when it is logging errors' do
+        before(:each) { Ponominalu.log_errors = true }
 
-        expect(logger).to receive(:warn)
-          .with('Nothing was found. Result is empty.')
-        subject.on_complete(env_empty)
-      end
+        it 'calls warn method on the logger if result is empty' do
+          env_empty.stub(:body=)
 
-      it 'calls error method on the logger if API error is returned' do
-        env_api_error.stub(:body=)
+          expect(logger).to receive(:warn)
+            .with('Nothing was found. Result is empty.')
+          subject.on_complete(env_empty)
+        end
 
-        expect(logger).to receive(:error)
-          .with('-200: API error.')
-        subject.on_complete(env_api_error)
-      end
+        it 'calls error method on the logger if API error is returned' do
+          env_api_error.stub(:body=)
 
-      it 'calls error method on the logger if API error is returned' do
-        env_fail.stub(:body=)
+          expect(logger).to receive(:warn)
+            .with('-200: API error.')
+          subject.on_complete(env_api_error)
+        end
 
-        expect(logger).to receive(:error)
-          .with('Request failed with status code 404.')
-        subject.on_complete(env_fail)
+        it 'calls error method on the logger if API error is returned' do
+          env_fail.stub(:body=)
+
+          expect(logger).to receive(:warn)
+            .with('Request failed with status code 404.')
+          subject.on_complete(env_fail)
+        end
       end
 
       it 'calls debug method on the logger if log_responses is true' do
