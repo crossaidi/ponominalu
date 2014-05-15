@@ -18,6 +18,10 @@ module Ponominalu
     def method_missing(method, *args, &block)
       API.call_method(method, *args, &block)
     end
+
+    def unregister_alias
+      Object.send(:remove_const, :Pn) if defined?(Pn)
+    end
   end
 
   # Register alias
