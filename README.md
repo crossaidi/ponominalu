@@ -19,6 +19,35 @@ $ gem install ponominalu
 
 ### Вызов методов
 
+``` ruby
+# вызываем методы API, как методы модуля Ponominalu в нотации snake_case
+
+artists = Pn.get_artists
+
+# если ponominalu.ru ожидает получить параметр в виде списка,
+# разделенного запятыми, то его можно передать массивом
+venue = Pn.get_venue(id: 77, exclude: [:description, :eng_title, :address])
+
+# большинство методов возвращает структуры Hashie::Mash
+# и массивы из них
+venue.title                 # => "Гостиный двор"
+venue.alias                 # => "gostiniy-dvor"
+venue.stations.first.title  # => "Китай-город"
+
+# если метод, возвращающий массив, вызывается с блоком,
+# то блок будет выполнен для каждого элемента,
+# и метод вернет обработанный массив
+
+venue = Pn.get_venues(limit: 5) do |venue|
+  "#{venue.alias}"
+end
+# => ["royal-beach-club",
+# "klub-kubrik",
+# "dk-rossiya",
+# "jazz-club-igorya-butmana-na-taganke",
+# "centr-razvitiya-biznesa-sberbanka"]
+```
+
 ### Прочее
 
 По умолчанию автоматически создается короткий синоним `Pn` для модуля `Ponominalu`.
@@ -89,17 +118,21 @@ Ponominalu.configure do |config|
   # выбрасывать исключение, если в результате запроса ничего не было найдено
   config.empty_strict = false
 
-  # результат возвращается в соответствии с форматом указанном в документации, вместе с ключами "code", "ts" а также параметрами запроса, которые могут пригодиться в дальнейшем, в ходе выполнения программы. По умолчанию возвращается непосредственно ответ (ключ "message").
+  # результат возвращается в соответствии с форматом указанном в документации,
+  # вместе с ключами "code", "ts" а также параметрами запроса, которые могут
+  # пригодиться в дальнейшем, в ходе выполнения программы.
+  # По умолчанию возвращается непосредственно ответ (ключ "message").
   config.wrap_response = false
 
   # логгер
   config.logger        = Rails.logger
   config.log_requests  = true  # параметры запросов
+  config.log_errors    = true  # параметры запросов
   config.log_responses = false # удачные ответы
 end
 ```
 
-Либо вызовом `Ponominalu.configure` с хэшем в качестве параметра:
+Либо вызовом `Ponominalu.configure` с хэшем параметров в качестве аргумента:
 
 ``` ruby
 Ponominalu.configure({
