@@ -72,7 +72,7 @@ Pn.get_artist
 # Ponominalu::Error: Ponominalu returned an error -200: 'alias Required' after calling method 'get_artist' without parameters. App session is '123'.
 ```
 
-### Логгирование
+### Логгинг
 
 `ponominalu` логгирует служебную информацию о запросах при вызове методов. По умолчанию все пишется в `STDOUT`, однако в настройке можно указать любой другой совместимый логгер, например `Rails.logger`.
 
