@@ -1,6 +1,6 @@
 module Ponominalu
   # Faraday middleware for a passing the session param to the request
-  # and config data to the response under the hood.
+  # and config data to the response.
   # Also it handles errors
   class Middleware < Faraday::Response::Middleware
     # Passes the session param
